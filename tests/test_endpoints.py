@@ -7,6 +7,8 @@ from yacut.models import URLMap
 CREATE_SHORT_LINK_URL = '/api/id/'
 GET_ORIGINAL_LINK_URL = '/api/id/{short_id}/'
 VALIDATION_ERROR_KEY = 'message'
+# Escaped for use inside .format()-called f-strings
+GET_ORIGINAL_LINK_URL_MSG = GET_ORIGINAL_LINK_URL.replace('{', '{{').replace('}', '}}')
 
 
 def test_create_id(client):
@@ -211,31 +213,31 @@ def test_get_url_endpoint(client, short_python_url):
         GET_ORIGINAL_LINK_URL.format(short_id=short_python_url.short)
     )
     assert response.status_code == HTTPStatus.OK, (
-        f'GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL}` должен вернуть '
+        f'GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL_MSG}` должен вернуть '
         f'ответ со статус-кодом {HTTPStatus.OK.value}.'
     )
     expected_key = 'url'
     expected_response = {expected_key: PY_URL}
     assert response.json.keys() == expected_response.keys(), (
-        f'Ответ на GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL}` должен '
+        f'Ответ на GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL_MSG}` должен '
         f'содержать ключ `{expected_key}`.'
     )
     assert response.json[expected_key] == expected_response[expected_key], (
         f'Ключ `{expected_key}` в ответе на GET-запрос к эндпоинту '
-        f'`{GET_ORIGINAL_LINK_URL}` содержит значение, отличное от ожидаемого.'
+        f'`{GET_ORIGINAL_LINK_URL_MSG}` содержит значение, отличное от ожидаемого.'
     )
 
 
 def test_get_url_not_found(client):
     assert_msg_pattern = (
-        f'GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL}` с несуществующим '
+        f'GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL_MSG}` с несуществующим '
         '`short_id` {}.'
     )
     response = client.get(
         GET_ORIGINAL_LINK_URL.format(short_id='does_not_exist')
     )
     assert response.status_code == HTTPStatus.NOT_FOUND, (
-        f'GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL}` с несуществующим '
+        f'GET-запрос к эндпоинту `{GET_ORIGINAL_LINK_URL_MSG}` с несуществующим '
         '`short_id` должен вернуть ответ со статус-кодом '
         f'{HTTPStatus.NOT_FOUND.value}.'
     )

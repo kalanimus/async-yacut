@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "async-yacut"
+version = "0.1.0"
+description = "Async URL shortener with Yandex Disk file upload support"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [{name = "kalanimus"}]
+keywords = ["flask", "url-shortener", "yandex-disk"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Flask",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+dependencies = [
+    "Flask>=3.0",
+    "Flask-SQLAlchemy>=3.1",
+    "Flask-Migrate>=4.0",
+    "Flask-WTF>=1.2",
+    "aiohttp>=3.9",
+    "alembic>=1.12",
+    "Pillow>=10.0",
+    "python-dotenv>=1.0",
+    "SQLAlchemy>=2.0",
+    "Werkzeug>=3.0",
+    "WTForms>=3.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-aiohttp>=1.0",
+    "pytest-asyncio>=0.23",
+    "flake8>=5.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["yacut*"]
+
+[tool.pytest.ini_options]
+norecursedirs = ["env/*"]
+addopts = "-vv -p no:cacheprovider -p no:warnings"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+env = [
+    "PYTHONPATH=./",
+    "FLASK_APP=yacut",
+    "SECRET_KEY=1234test4321",
+]
+
+[tool.flake8]
+ignore = ["E265", "F811", "PT001", "DJ05", "D100", "D105", "D104", "W503", "W504", "W292"]
+max-line-length = 79
+max-complexity = 10
+exclude = ["env", "venv", "tests", "migrations"]
+per-file-ignores = [
+    "__init__.py: F401, E402",
+]
