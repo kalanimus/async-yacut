@@ -8,4 +8,4 @@ class Config:
         'sqlite:///db.sqlite3',
     )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DISK_TOKEN = os.getenv('DISK_TOKEN')
+    DISK_TOKEN = os.getenv('DISK_TOKEN', '')

@@ -5,7 +5,7 @@ from flask import jsonify, request, url_for
 
 from yacut import app, db
 from yacut.models import URLMap
-from yacut.utils import get_unique_short_id
+from yacut.utils import get_unique_short_id, is_reserved_short_id
 from yacut.error_handlers import InvalidAPIUsage
 
 
@@ -39,7 +39,7 @@ def create_short_link():
             raise InvalidAPIUsage(INVALID_SHORT_ID_MESSAGE)
 
         custom_id_is_busy = (
-            custom_id == 'files'
+            is_reserved_short_id(custom_id)
             or URLMap.query.filter_by(short=custom_id).first() is not None
         )
 

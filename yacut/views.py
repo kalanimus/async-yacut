@@ -3,7 +3,7 @@ from flask import flash, redirect, render_template, url_for
 from yacut import app, db
 from yacut.forms import FileForm, URLMapForm
 from yacut.models import URLMap
-from yacut.utils import get_unique_short_id
+from yacut.utils import get_unique_short_id, is_reserved_short_id
 from yacut.yandex_disk import upload_files
 
 
@@ -21,11 +21,8 @@ def index_view():
         custom_id = (form.custom_id.data or '').strip() or None
 
         short_id_is_busy = (
-            custom_id == 'files'
-            or (
-                custom_id is not None
-                and URLMap.query.filter_by(short=custom_id).first() is not None
-            )
+            is_reserved_short_id(custom_id)
+            or URLMap.query.filter_by(short=custom_id).first() is not None
         )
 
         if short_id_is_busy:

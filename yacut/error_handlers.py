@@ -23,14 +23,14 @@ def handle_invalid_api_usage(error):
     ), error.status_code
 
 
-@app.errorhandler(HTTPStatus.NOT_FOUND)
+@app.errorhandler(404)
 def page_not_found(error):
     return render_template(
         '404.html'
     ), HTTPStatus.NOT_FOUND
 
 
-@app.errorhandler(HTTPStatus.INTERNAL_SERVER_ERROR)
+@app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
     return render_template(
